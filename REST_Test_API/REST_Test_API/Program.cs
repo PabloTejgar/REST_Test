@@ -1,25 +1,31 @@
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace REST_Test_API.API
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+
+    /// <summary>
+    /// Program class.
+    /// </summary>
+    public class Program
+    {
+        /// <summary>
+        /// Main method.
+        /// </summary>
+        /// <param name="args">Main args.</param>
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        /// <summary>
+        /// Host builder property.
+        /// </summary>
+        /// <param name="args">Main args.</param>
+        /// <returns>Host builder.</returns>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
