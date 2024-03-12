@@ -8,6 +8,7 @@ namespace REST_Test.Model.Repositories
         Task<T> GetAsync(int id, bool tracked = true);
         Task CreateAsync(T entity);
         Task RemoveAsync(T entity);
+        Task RemoveAsync(int id);
         Task UpdateAsync(T entity);
         Task SaveAsync();
     }

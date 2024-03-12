@@ -29,20 +29,17 @@ namespace REST_Test.API.Controllers
         public async Task Add(Product product)
         {
             await repository.CreateAsync(product);
-            Ok();
         }
 
 
         public async Task Update(Product product)
         {
             await repository.UpdateAsync(product);
-            Ok();
         }
 
         public async Task Delete(Product product)
         {
             await repository.RemoveAsync(product);
-            NoContent();
         }
     }
 }

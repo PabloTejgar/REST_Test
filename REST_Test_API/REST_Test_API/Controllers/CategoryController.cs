@@ -29,20 +29,17 @@ namespace REST_Test.API.Controllers
         public async Task Add(Category category)
         {
             await repository.CreateAsync(category);
-            Ok();
         }
 
 
         public async Task Update(Category category)
         {
             await repository.UpdateAsync(category);
-            Ok();
         }
 
         public async Task Delete(Category category)
         {
             await repository.RemoveAsync(category);
-            NoContent();
         }
     }
 }

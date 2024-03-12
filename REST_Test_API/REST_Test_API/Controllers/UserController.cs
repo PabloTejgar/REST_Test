@@ -15,7 +15,6 @@ namespace REST_Test.API.Controllers
             logger = userLogger;
         }
 
-
         public async Task<User> Get(int id)
         {
             return await repository.GetAsync(id);
@@ -29,20 +28,17 @@ namespace REST_Test.API.Controllers
         public async Task Add(User user)
         {
             await repository.CreateAsync(user);
-            Ok();
         }
 
 
         public async Task Update(User user)
         {
             await repository.UpdateAsync(user);
-            Ok();
         }
 
         public async Task Delete(User user)
         {
             await repository.RemoveAsync(user);
-            NoContent();
         }
     }
 }

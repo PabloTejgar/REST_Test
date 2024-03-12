@@ -55,6 +55,17 @@ namespace REST_Test.Model.Repositories
             }
         }
 
+        public async Task RemoveAsync(int id)
+        {
+            var entityToDelete = await dbSet.FindAsync(id);
+
+            if (entityToDelete != null)
+            {
+                dbSet.Remove(entityToDelete);
+                await SaveAsync();
+            }
+        }
+
         public async Task SaveAsync()
         {
             await context.SaveChangesAsync();
