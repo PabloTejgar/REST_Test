@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using REST_Test.Business.Mappings;
+using REST_Test.Business.Services;
+using REST_Test.Business.Services.Interface;
 using REST_Test.Data.Data;
+using REST_Test.Model.Repositories;
 
 /// <summary>
 /// Startup class.
@@ -34,6 +38,19 @@ public class Startup
             options.UseNpgsql(Configuration.GetConnectionString("RESTTestContext"));
         });
 
+        services.AddSwaggerGen();
+
+        //// AutoMapper Configuration
+        services.AddAutoMapper(typeof(MappingProfile));
+
+        //// Generic Repository
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        //// Generic Services
+        services.AddScoped(typeof(IReadServiceAsync<,>), typeof(ReadServiceAsync<,>));
+        services.AddScoped(typeof(IGenericServiceAsync<,>), typeof(GenericServiceAsync<,>));
+
+
         services.AddMvc();
     }
 
@@ -57,10 +74,13 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseSwagger();
+        app.UseSwaggerUI();
+
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
         });
+
     }
 }

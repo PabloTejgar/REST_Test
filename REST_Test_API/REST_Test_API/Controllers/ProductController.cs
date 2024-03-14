@@ -1,45 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using REST_Test.Business.DTO;
+using REST_Test.Business.Services.Interface;
 using REST_Test.Model.Models;
-using REST_Test.Model.Repositories;
 
 namespace REST_Test.API.Controllers
 {
     public class ProductController : Controller
     {
-        private IGenericRepository<Product> repository;
+        private IGenericServiceAsync<Product, UserDTO> writeService;
+        private IReadServiceAsync<Product, UserDTO> readService;
         private ILogger<ProductController> logger;
 
-        public ProductController(IGenericRepository<Product> genericRepository, ILogger<ProductController> productLogger)
+        public ProductController(
+            IGenericServiceAsync<Product, UserDTO> writeService,
+            IReadServiceAsync<Product, UserDTO> readService,
+            ILogger<ProductController> productLogger)
         {
-            repository = genericRepository;
+            this.writeService = writeService;
+            this.readService = readService;
             logger = productLogger;
         }
 
 
-        public async Task<Product> Get(int id)
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
-            return await repository.GetAsync(id);
+            return Ok(await readService.GetAsync(id));
         }
 
-        public async Task<IEnumerable<Product>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
-            return await repository.GetAllAsync();
+            return Ok(await readService.GetAllAsync());
         }
 
-        public async Task Add(Product product)
+        public async Task Add(UserDTO product)
         {
-            await repository.CreateAsync(product);
+            await writeService.AddAsync(product);
         }
 
 
-        public async Task Update(Product product)
+        public async Task Update(UserDTO product)
         {
-            await repository.UpdateAsync(product);
+            await writeService.UpdateAsync(product);
         }
 
-        public async Task Delete(Product product)
+        public async Task Delete(int id)
         {
-            await repository.RemoveAsync(product);
+            await writeService.DeleteAsync(id);
         }
     }
 }

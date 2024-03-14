@@ -1,44 +1,50 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using REST_Test.Business.DTO;
+using REST_Test.Business.Services.Interface;
 using REST_Test.Model.Models;
-using REST_Test.Model.Repositories;
 
 namespace REST_Test.API.Controllers
 {
     public class UserController : Controller
     {
-        private IGenericRepository<User> repository;
+        private IGenericServiceAsync<User, UserDTO> writeService;
+        private IReadServiceAsync<User, UserDTO> readService;
         private ILogger<UserController> logger;
 
-        public UserController(IGenericRepository<User> genericRepository, ILogger<UserController> userLogger)
+        public UserController(IGenericServiceAsync<User, UserDTO> writeService,
+            IReadServiceAsync<User, UserDTO> readService,
+            ILogger<UserController> userLogger)
+
         {
-            repository = genericRepository;
+            this.writeService = writeService;
+            this.readService = readService;
             logger = userLogger;
         }
 
-        public async Task<User> Get(int id)
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
-            return await repository.GetAsync(id);
+            return Ok(await readService.GetAsync(id));
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
-            return await repository.GetAllAsync();
+            return Ok(await readService.GetAllAsync());
         }
 
-        public async Task Add(User user)
+        public async Task Add(UserDTO product)
         {
-            await repository.CreateAsync(user);
+            await writeService.AddAsync(product);
         }
 
 
-        public async Task Update(User user)
+        public async Task Update(UserDTO product)
         {
-            await repository.UpdateAsync(user);
+            await writeService.UpdateAsync(product);
         }
 
-        public async Task Delete(User user)
+        public async Task Delete(int id)
         {
-            await repository.RemoveAsync(user);
+            await writeService.DeleteAsync(id);
         }
     }
 }

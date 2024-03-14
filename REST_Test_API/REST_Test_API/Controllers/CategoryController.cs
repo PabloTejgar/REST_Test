@@ -1,45 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using REST_Test.Business.DTO;
+using REST_Test.Business.Services.Interface;
 using REST_Test.Model.Models;
-using REST_Test.Model.Repositories;
 
 namespace REST_Test.API.Controllers
 {
     public class CategoryController : Controller
     {
-        private IGenericRepository<Category> repository;
+        private IGenericServiceAsync<Category, CategoryDTO> writeService;
+        private IReadServiceAsync<Category, CategoryDTO> readService;
         private ILogger<CategoryController> logger;
 
-        public CategoryController(IGenericRepository<Category> genericRepository, ILogger<CategoryController> categoryLogger)
+        public CategoryController(
+            IGenericServiceAsync<Category, CategoryDTO> writeService,
+            IReadServiceAsync<Category, CategoryDTO> readService, 
+            ILogger<CategoryController> categoryLogger)
         {
-            repository = genericRepository;
+            this.writeService = writeService;
+            this.readService = readService;
             logger = categoryLogger;
         }
 
 
-        public async Task<Category> Get(int id)
+        public async Task<ActionResult<CategoryDTO>> Get(int id)
         {
-            return await repository.GetAsync(id);
+            return Ok(await readService.GetAsync(id));
         }
 
-        public async Task<IEnumerable<Category>> GetAll()
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAll()
         {
-            return await repository.GetAllAsync();
+            return Ok(await readService.GetAllAsync());
         }
 
-        public async Task Add(Category category)
+        public async Task Create(CategoryDTO category)
         {
-            await repository.CreateAsync(category);
+            await writeService.AddAsync(category);
         }
 
 
-        public async Task Update(Category category)
+        public async Task Update(CategoryDTO category)
         {
-            await repository.UpdateAsync(category);
+            await writeService.UpdateAsync(category);
         }
 
-        public async Task Delete(Category category)
+        public async Task Delete(int id)
         {
-            await repository.RemoveAsync(category);
+            await writeService.DeleteAsync(id);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace REST_Test.Business.Services
         private readonly IMapper automapper;
 
 
-        public GenericServiceAsync(IGenericServiceAsync<TEntity> genRepository, IMapper mapper) : base(genRepository, mapper)
+        public GenericServiceAsync(IGenericRepository<TEntity> genRepository, IMapper mapper) : base(genRepository, mapper)
         {
             repository = genRepository;
             automapper = mapper;
